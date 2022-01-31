@@ -1,16 +1,7 @@
 <?php
 
-$longitude = readline('Please write a longitude');
-echo '<br>';
-$latitude = readline('Please write a latitude');
-
-function coordinates($latitude, $longitude){
-
-
 function checkType($type_of_longitude, $type_of_latitude, $longitude, $latitude){   
-    $type_of_longitude = gettype($longitude);
-    $type_of_latitude = gettype($latitude);
-    
+
     if (!is_float($type_of_longitude)) { //проверяем тип долготы 
         return "invalid longitude, is not a float!";
     }
@@ -31,10 +22,7 @@ function checkType($type_of_longitude, $type_of_latitude, $longitude, $latitude)
 echo '<br>';
 
 function coordinatesCounts($count_of_longitude, $count_of_latitude, $longitude, $latitude ){
-    $count_of_longitude = count($longitude); 
-    $count_of_latitude = count($latitude);
     //количество  символов долготы
-  
 if ($count_of_longitude <= 1) {
     return "Error, longitude too short!";
 }else{
@@ -53,9 +41,6 @@ if ($count_of_latitude <= 1) {
 echo '<br>';
 
 function checkLocation($coordinates_max, $coordinates_min , $longitude, $latitude ){
-
-    $coordinates_min=20.45684;
-    $coordinates_max=30.45235;
 //находится ли в моем квадарате заданные координаты?
 if ($longitude < $coordinates_min) { 
    return "error 422 coordinates are outside my square";
@@ -70,7 +55,21 @@ if ($latitude > $coordinates_max ) {
 }
 }
 
+function coordinates($latitude, $longitude){
 
+    $longitude = readline('Please write a longitude');
+    echo '<br>';
+    $latitude = readline('Please write a latitude');
+    $coordinates_min=20.45684;
+    $coordinates_max=30.45235;
+    $count_of_longitude = count($longitude); 
+    $count_of_latitude = count($latitude);
+    $type_of_longitude = gettype($longitude);
+    $type_of_latitude = gettype($latitude);
+    
+    
 } return "ok!";
+
+echo coordinates($latitude, $longitude);
 
 
