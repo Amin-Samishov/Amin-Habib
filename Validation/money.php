@@ -12,7 +12,7 @@ function validateInt($money_in_cents)
 
 function validateMin($money_in_cents, $min_value)
 {
-    if ($money_in_cents < $min_value)
+    if ($money_in_cents <= $min_value)
     {
         return "ERROR! This amount of money is not enough";
     }
