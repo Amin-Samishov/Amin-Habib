@@ -1,6 +1,6 @@
 <?php
 
-function CheckingTheDataType($money_in_cents, $sender_account_number, $recipient_account_number)
+function validateType($money_in_cents, $sender_account_number, $recipient_account_number)
 {
     echo "Sender's account number: $sender_account_number";
     echo "<br>";
@@ -33,7 +33,7 @@ function validateMin($money_in_cents, $min_value)
     return "OK! 200. Money within the minimum: ".$money_in_cents;
 }
 
-echo CheckingTheDataType(2500000, 6085431297834617, 4158420396874917);
+echo validateType(2500000, 6085431297834617, 4158420396874917);
 echo "<br>";
 echo validateMax(9000000, 10000000);
 echo "<br>";
