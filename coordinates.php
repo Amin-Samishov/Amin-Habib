@@ -1,21 +1,16 @@
 <?php
 
-$type_of_longitude = gettype($longitude);
-$type_of_latitude = gettype($latitude);
-
-$min_longitude_latitude_value=20.45684;
-$max_longitude_latitude_value=30.45235;
-
-$count_of_longitude = count($longitude); 
-$count_of_latitude = count($latitude);
+$longitude = readline('Please write a longitude');
+echo '<br>';
+$latitude = readline('Please write a latitude');
 
 function coordinates($latitude, $longitude){
-    $longitude = readline('Please write a longitude');
-    echo '<br>';
-    $latitude = readline('Please write a latitude');
 
 
-function checkCoordinatesType($type_of_longitude, $type_of_latitude, $longitude, $latitude){   
+function checkType($type_of_longitude, $type_of_latitude, $longitude, $latitude){   
+    $type_of_longitude = gettype($longitude);
+    $type_of_latitude = gettype($latitude);
+    
     if (!is_float($type_of_longitude)) { //проверяем тип долготы 
         return "invalid longitude, is not a float!";
     }
@@ -35,8 +30,11 @@ function checkCoordinatesType($type_of_longitude, $type_of_latitude, $longitude,
 
 echo '<br>';
 
-function countCoordinatesNumber($count_of_longitud, $count_of_latitude, $longitude, $latitude ){
-   //количество  символов долготы
+function coordinatesCounts($count_of_longitude, $count_of_latitude, $longitude, $latitude ){
+    $count_of_longitude = count($longitude); 
+    $count_of_latitude = count($latitude);
+    //количество  символов долготы
+  
 if ($count_of_longitude <= 1) {
     return "Error, longitude too short!";
 }else{
@@ -54,17 +52,18 @@ if ($count_of_latitude <= 1) {
 
 echo '<br>';
 
-function checkCoordinatesLocation($min_longitude_latitude_value, $max_longitude_latitude_value, $longitude, $latitude ){
+function checkLocation($coordinates_max, $coordinates_min , $longitude, $latitude ){
 
-
+    $coordinates_min=20.45684;
+    $coordinates_max=30.45235;
 //находится ли в моем квадарате заданные координаты?
-if ($longitude < $min_longitude_latitude_value) { 
+if ($longitude < $coordinates_min) { 
    return "error 422 coordinates are outside my square";
 }else{
     return "Ok. longtitude coordinates in my square!";
 }
 
-if ($latitude > $max_longitude_latitude_value ) {
+if ($latitude > $coordinates_max ) {
     return "error 422 coordinates are outside my square";
 }else {
     return "Ok. latitude coordinates in my square!";
