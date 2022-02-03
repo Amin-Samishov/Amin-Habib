@@ -19,7 +19,7 @@ function validateMin($money_in_cents, $min_value)
     return "OK! 200. Money minimum: ".$money_in_cents;
 }
 
-function validateMax($money_in_cents, $max_value)
+function validateMax($money_in_cents, $a, $max_value)
 {
     if ($money_in_cents >= $max_value) {
         return "ERROR! This amount of money is a lot";
@@ -27,21 +27,34 @@ function validateMax($money_in_cents, $max_value)
     return "OK! 200. Money maximum: ".$money_in_cents;
 }
 
-function validateTransfer($money_in_cents, string $sender_account_number, string $recipient_account_number)
+function validate($request, $money_in_cents, $min_value, $max_value)
 {
-    echo "Sender's account number: ".$sender_account_number;
-    echo "<br>";
-    echo "Recipient's account number: ".$recipient_account_number;
-    echo "<br>";
+    $message = [];
+    $rules_in_array = explode("|", $request);
+    foreach ($rules_in_array as $rule)
+    {
+        array_push($message, call_user_func_array("validate".ucfirst($rule), [$money_in_cents, $min_value, $max_value]));
 
-    $validate_message = "";
-    $validate_message .= validateInt($money_in_cents);
-    $validate_message .= validateMin($money_in_cents, 100000);
-    $validate_message .= validateMax($money_in_cents, 10000000);
-    return "$validate_message";
+
+    }
+    return $message;
 }
 
-$money_in_cents = 250000;
+function index($request, $min_value, $max_value, $sender_account_number, $recipient_account_number)
+{
+
+    echo "Sender's account number: $sender_account_number<br>";
+    echo "Recipient's account number:  $recipient_account_number<br>";
+    $rules = "int|max|min";
+    $messages = validate($rules, $request, $min_value, $max_value);
+
+    return count($messages)
+        ? implode("<br>", $messages)
+        : 'No Validation messages';
+}
+$request = 250000;
+$min_value = 100000;
+$max_value = 10000000;
 $sender_account_number = 4276802156936452;
 $recipient_account_number = 6276081265936423;
-echo validateTransfer($money_in_cents, $sender_account_number, $recipient_account_number);
+echo index($request, $min_value, $max_value, $sender_account_number, $recipient_account_number );
