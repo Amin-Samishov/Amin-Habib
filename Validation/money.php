@@ -27,14 +27,13 @@ function validateMax($money_in_cents, $a, $max_value)
     return "OK! 200. Money maximum: ".$money_in_cents;
 }
 
-function validate($request, $money_in_cents, $min_value, $max_value)
+function validate($rules, $request, $min_value, $max_value)
 {
     $message = [];
-    $rules_in_array = explode("|", $request);
+    $rules_in_array = explode("|", $rules);
     foreach ($rules_in_array as $rule)
     {
-        array_push($message, call_user_func_array("validate".ucfirst($rule), [$money_in_cents, $min_value, $max_value]));
-
+        array_push($message, call_user_func_array("validate".ucfirst($rule), [$request, $min_value, $max_value]));
 
     }
     return $message;
@@ -44,7 +43,7 @@ function index($request, $min_value, $max_value, $sender_account_number, $recipi
 {
 
     echo "Sender's account number: $sender_account_number<br>";
-    echo "Recipient's account number:  $recipient_account_number<br>";
+    echo "Recipient's account number: $recipient_account_number<br>";
     $rules = "int|max|min";
     $messages = validate($rules, $request, $min_value, $max_value);
 
