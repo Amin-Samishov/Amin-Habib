@@ -1,15 +1,15 @@
 <?php
 
-function validateFloat($longitude, $latitude) : string
+function validateFloat($value) : string
 {
-	if (!filter_var($longitude, FILTER_VALIDATE_FLOAT)) {
+	if (!filter_var($value, FILTER_VALIDATE_FLOAT)) {
 		return "ERROR: Type of longitude must be float!";
 	} else {
 		return "Type of longitude is correct! Thanks!";
     }
     echo '<br>';
 
-    if (!filter_var($latitude, FILTER_VALIDATE_FLOAT)) {
+    if (!filter_var($value, FILTER_VALIDATE_FLOAT)) {
 		return "ERROR: Type of latitude must be float!";
 	} else {
 		return "Type of latitude is correct! Thanks!";
@@ -18,27 +18,27 @@ function validateFloat($longitude, $latitude) : string
 
     echo '<br>';
 
-function validateCount($longitude, $latitude, $min_value, $max_value) : string
+function validateCount($value, $min_value, $max_value) : string
 {
-	if (strlen($longitude) <= $min_value) {
+	if (strlen($value) <= $min_value) {
 		return "ERROR: Too few characters of longitude sent";
 	} else {
 		return "Min characters of longitude are OK";
     }
     echo '<br>';
-    if (strlen($longitude) >= $max_value) {
+    if (strlen($value) >= $max_value) {
 		return "ERROR: Too much characters of longitude sent";
 	} else {
 		return "Max characters of longitude are OK";
     }
 
-	if (strlen($latitude) <= $min_value) {
+	if (strlen($value) <= $min_value) {
 		return "ERROR: Too few characters of latitude sent";
 	} else {
 		return "Min characters of latitude are OK";
     }
     echo '<br>';
-    if (strlen($latitude) >= $max_value) {
+    if (strlen($value) >= $max_value) {
 		return "ERROR: Too much characters of latitude  sent";
 	} else {
 		return "Max characters of latitude are OK";
@@ -46,18 +46,17 @@ function validateCount($longitude, $latitude, $min_value, $max_value) : string
 echo '<br>';
 
 
-function validateInSquareLongitude($longitude, $x1, $x2){
+function validateInSquare($value, $last_point_1, $last_point_2){
 
-if ($longitude >= $x1 || $longitude <= $x2) { 
+if ($value >= $last_point_1 || $value <= $last_point_2) { 
 	return "Ok. longitude's coordinates in my square(min value)!";
 }
 return "error 422 longitude's coordinates are outside my square";
-}
+
 
 echo '<br>';
 
-function validateInSquareLatitude( $latitude, $y1, $y2){
-    if ($latitude >= $y1 || $latitude <= $y2 ) {
+    if ($value >= $last_point_1 || $value <= $last_point_2 ) {
 		return "Ok. latitude's coordinates in my square(max value)!";
 	}
 	return "error 422 latitude's coordinates are outside my square";
@@ -74,10 +73,12 @@ $x2 = 700;
 $y1 = 1500;
 $y2 = 2100;
 $validate_message = "";
-$validate_message .= validateFloat($longitude, $latitude);
-$validate_message .= validateCount($longitude, $latitude, 0, 10000);
-$validate_message .= validateInSquareLongitude($longitude, $x1, $x2);
-$validate_message .= validateInSquareLatitude( $latitude, $y1, $y2);
+$validate_message .= validateFloat($longitude);
+$validate_message .= validateFloat($latitude);
+$validate_message .= validateCount($longitude, 0, 10000);
+$validate_message .= validateCount($latitude, 0, 10000);
+$validate_message .= validateInSquare($longitude, $x1, $x2);
+$validate_message .= validateInSquare($latitude, $y1, $y2);
 
 return $validate_message;
 }
