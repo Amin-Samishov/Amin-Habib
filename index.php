@@ -9,9 +9,8 @@
     function makeMilkshakeWithStrawberries
     (   int $milk,
         int $strawberries,
-        int $honey,
-
-      {
+        int $honey,)
+ {
             echo 
             "1. Put the $strawberries gram strawberries and $honey tablespoon honey in a blender;<br>".
             "2. Pureeing until smooth;<br>".
