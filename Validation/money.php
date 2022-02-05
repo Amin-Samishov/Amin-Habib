@@ -55,7 +55,7 @@ function index($request, $sender_account_number, $recipient_account_number)
         ? implode("<br>", $messages)
         : 'No Validation messages';
 }
-$request = 250000;
-$sender_account_number = 4276802156936452;
-$recipient_account_number = 6276081265936423;
+$request = readline("Enter your request: ");
+$sender_account_number = readline("Enter the sender's account number: ");
+$recipient_account_number = readline("Enter the recipient's account number: ");
 echo index($request, $sender_account_number, $recipient_account_number);
