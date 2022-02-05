@@ -4,7 +4,7 @@ function validateInt($money_in_cents)
 {
     if (!is_int($money_in_cents))
     {
-        return "Error! Unsuitable data type";
+        return "Error! The type must be an integer";
     }
 
     return "OK! 200. Money in cents: ".$money_in_cents;
@@ -27,21 +27,35 @@ function validateMax($money_in_cents, $max_value)
     return "OK! 200. Money maximum: ".$money_in_cents;
 }
 
-function validateTransfer($money_in_cents, string $sender_account_number, string $recipient_account_number)
+function validate($rules, $request)
 {
-    echo "Sender's account number: ".$sender_account_number;
-    echo "<br>";
-    echo "Recipient's account number: ".$recipient_account_number;
-    echo "<br>";
-
-    $validate_message = "";
-    $validate_message .= validateInt($money_in_cents);
-    $validate_message .= validateMin($money_in_cents, 100000);
-    $validate_message .= validateMax($money_in_cents, 10000000);
-    return "$validate_message";
+    $message = [];
+    $rules_in_array = explode("|", $rules);
+    foreach ($rules_in_array as $rule)
+    {
+        $value =  explode(":", $rule);
+        if (count($value)==1){
+            array_push($message, call_user_func_array("validate".ucfirst($value[0]), [$request]));
+        }else{
+            array_push($message, call_user_func_array("validate".ucfirst($value[0]), [$request, $value[1]]));
+        }
+    }
+    return $message;
 }
 
-$money_in_cents = 250000;
-$sender_account_number = 4276802156936452;
-$recipient_account_number = 6276081265936423;
-echo validateTransfer($money_in_cents, $sender_account_number, $recipient_account_number);
+function index($request, $sender_account_number, $recipient_account_number)
+{
+
+    echo "Sender's account number: $sender_account_number<br>";
+    echo "Recipient's account number: $recipient_account_number<br>";
+    $rules = "int|min:100000|max:10000000";
+    $messages = validate($rules, $request);
+
+    return count($messages)
+        ? implode("<br>", $messages)
+        : 'No Validation messages';
+}
+$request = readline("Enter your request: ");
+$sender_account_number = readline("Enter the sender's account number: ");
+$recipient_account_number = readline("Enter the recipient's account number: ");
+echo index($request, $sender_account_number, $recipient_account_number);
