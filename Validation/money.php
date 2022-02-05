@@ -4,7 +4,7 @@ function validateInt($money_in_cents)
 {
     if (!is_int($money_in_cents))
     {
-        return "Error! Unsuitable data type";
+        return "Error! The type must be an integer";
     }
 
     return "OK! 200. Money in cents: ".$money_in_cents;
@@ -34,7 +34,7 @@ function validate($rules, $request)
     foreach ($rules_in_array as $rule)
     {
         $value =  explode(":", $rule);
-        if ($value[0]=="int"){
+        if (count($value)==1){
             array_push($message, call_user_func_array("validate".ucfirst($value[0]), [$request]));
         }else{
             array_push($message, call_user_func_array("validate".ucfirst($value[0]), [$request, $value[1]]));
