@@ -1,6 +1,6 @@
 <?php
 
-function validateFloat($value) : string
+function validateFloat($value): string
 {
 	if (!filter_var($value, FILTER_VALIDATE_FLOAT)) {
 		return "ERROR: Type of value must be float!";
@@ -9,15 +9,8 @@ function validateFloat($value) : string
 	}
 }
 
-function validateMax($value, $max_value) : string
-{
-	if (strlen($value) >= $max_value) {
-		return "ERROR: Too much characters  sent";
-	} else {
-		return "Max characters are OK";
-	}
-}
-function validateMin($value, $min_value) : string
+
+function validateMin($value, $min_value): string
 {
 	if (strlen($value) <= $min_value) {
 		return "ERROR: Too few characters sent";
@@ -26,7 +19,16 @@ function validateMin($value, $min_value) : string
 	}
 }
 
-function validateInSquare($value, $last_point_1, $last_point_2)
+function validateMax($value, $max_value): string
+{
+	if (strlen($value) >= $max_value) {
+		return "ERROR: Too much characters sent";
+	} else {
+		return "Max characters are OK";
+	}
+}
+
+function validateSquare($value, $last_point_1, $last_point_2)
 {
 	if ($last_point_1 >= $value && $value <= $last_point_2) {
 		return "Ok. coordinates in my square(min value)!";
@@ -34,28 +36,35 @@ function validateInSquare($value, $last_point_1, $last_point_2)
 		return "error 422 coordinates are outside my square";
 	}
 }
-
-function validateCoordination($longitude, $latitude){
-echo "Longitude coordination : " . $longitude;
-echo ' <br>';
-echo "Latitude coordination : " . $latitude;
-echo ' <br>';
-$x1 = 500;
-$x2 = 700;
-$y1 = 1500;
-$y2 = 2100;
-$validate_message = "";
-$validate_message .= validateFloat($longitude);
-$validate_message .= validateFloat($latitude);
-$validate_message .= validateMin($longitude, 11);
-$validate_message .= validateMin($latitude, 12);
-$validate_message .= validateMax($longitude, 21);
-$validate_message .= validateMax($latitude, 22);
-$validate_message .= validateInSquare($longitude, $x1, $x2);
-$validate_message .= validateInSquare($latitude, $y1, $y2);
-
-return $validate_message;
+function ruleParser($rules, $value )
+{
+	$arr_rules = explode('|', $rules);
+	$masssage = [];
+    foreach ($arr_rules as $rule) {
+        $param_rules = explode(':', $rule);
+		$parameters = array_slice($param_rules, 1);
+		if (count($param_rules) == 1) {
+            array_push($masssage,
+                call_user_func_array("validate" . ucfirst($param_rules[0]), [$value])
+            );
+        } else {
+            array_push($masssage,
+              call_user_func_array("validate" . ucfirst($param_rules[0]),[$value, ...$parameters])
+            );
+        }
+    }
+    return $masssage;
 }
+function index($request)
+{
+	$rules = 'float|min:11|max:22|square:500:1500';
+   	$messages=ruleParser($rules, $request);
+
+	   return count($messages)
+	   ? implode(",\n", $messages)
+	   : "No validation messages";
+}
+
 $longitude = readline(' Please wtite the longitude: ');
 $latitude = readline(' Please wtite the latitude: ');
-echo validateCoordination($longitude, $latitude);
+echo index($longitude, $latitude);
